@@ -1,0 +1,15 @@
+base_url = "https://kttnr.net"
+title = "kttnr"
+
+compile_sass = false
+minify_html = true
+
+generate_feed = true
+feed_filename = "atom.xml"
+
+[markdown]
+highlight_code = false
+
+[slugify]
+# I prefer manually following the slugify guidelines for file names so I know exactly what the pages are called.
+paths = "off"
