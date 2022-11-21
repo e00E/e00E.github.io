@@ -22,9 +22,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build
-        uses: shalzz/zola-deploy-action@v0.16.1
-        env:
-          BUILD_ONLY: true
+        run: |
+          mkdir /tmp/zola
+          wget -q -O - "https://github.com/getzola/zola/releases/download/v0.16.1/zola-v0.16.1-x86_64-unknown-linux-gnu.tar.gz" | tar -xzf - --directory /tmp
+          /tmp/zola build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:

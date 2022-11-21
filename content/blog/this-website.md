@@ -1,7 +1,7 @@
 +++
 title = "This website"
-date = 2022-01-01
-updated = 2022-01-02
+date = 2022-11-20
+updated = 2022-11-21
 +++
 
 This post explains how and why this website works.
