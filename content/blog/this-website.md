@@ -10,7 +10,7 @@ I want to write simple, plain text documents with little formatting. The natural
 
 The source code which generates this site is on [Github](https://github.com/e00E/e00E.github.io). The generated static files are hosted by [Github Pages](https://docs.github.com/en/pages). I use Github Pages with my own domain so that I am free to migrate in the future. I will likely self host eventually.
 
-I want the generated HTML to be simple and semantic. This means using native elements like `article` instead of `div` when reasonable and giving the browser freedom to present the website how it wants to. For example, I do not enforce a particular color scheme. This allows readers to choose how they want the site to look by using their own CSS or their browser's reader mode.
+I want the generated HTML to be simple and semantic. This means using native elements like `article` instead of `div` when reasonable and giving the browser freedom when presenting the website. For example, I do not enforce a particular color scheme. This allows readers to choose how they want the site to look by using their own CSS or their browser's reader mode.
 
 ## Mardown examples
 
