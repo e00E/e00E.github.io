@@ -1,14 +1,15 @@
 base_url = "https://kttnr.net"
 title = "kttnr"
 
-compile_sass = false
+compile_sass = true
 minify_html = true
 
 generate_feed = true
 feed_filename = "atom.xml"
 
 [markdown]
-highlight_code = false
+highlight_code = true
+highlight_theme = "solarized-light"
 
 [slugify]
 # I prefer manually following the slugify guidelines for file names so I know exactly what the pages are called.

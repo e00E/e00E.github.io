@@ -1,27 +1,35 @@
 article,
 section {
-    max-width: 120ch;
     margin: 0 auto;
+    max-width: 120ch;
 }
 
 #article-dates {
     font-size: small;
 }
 
-pre {
-    background-color: #eee;
-    max-width: 100%;
-}
-
 code {
     background-color: #eee;
 }
 
+pre {
+    /* Remove syntax highlighting background color. */
+    background-color: #fff !important;
+    border: 1px solid #999;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 1ch;
+}
+
+pre > code {
+    background-color: #fff;
+}
+
 blockquote {
-    border-left: 0.5ch solid #eee;
-    padding-left: 1ch;
+    border-left: 0.5ch solid #999;
     margin-left: 0ch;
     margin-right: 0ch;
+    padding-left: 1ch;
 }
 
 table {
