@@ -13,9 +13,9 @@ C defines the following string types:
 - [multibyte](https://en.cppreference.com/w/c/string/multibyte), example UTF-8
 - [wide](https://en.cppreference.com/w/c/string/wide), example UTF-32
 
-All of them are null terminated. Each comes with syntax for creating [literals](https://en.cppreference.com/w/c/language/string_literal) in source code, and functions that use them like [`strcpy`](https://en.cppreference.com/w/c/string/byte/strcpy).
+All of them are null terminated. Each comes with syntax for creating [literals](https://en.cppreference.com/w/c/language/string_literal) in source code, and functions that operate on them like [`strcpy`](https://en.cppreference.com/w/c/string/byte/strcpy).
 
-For example, the literal `"hello"` is a null terminated byte string represented in memory as `0x68 0x65 0x6c 0x6c 0x6f 0x00`. The first 5 bytes come from the [ASCII](https://en.cppreference.com/w/c/language/ascii) encoding. The next and last byte is the null byte. It doesn't correspond to any character in the original text. It is there to indicate the end of the string so that functions using it know when to stop reading.
+For example, the literal `"hello"` is a null terminated byte string represented in memory as `0x68 0x65 0x6c 0x6c 0x6f 0x00`. The first 5 bytes come from the [ASCII](https://en.cppreference.com/w/c/language/ascii) encoding. The next and last byte is the null byte. It doesn't correspond to any character in the original text. It only indicates the end of the string.
 
 ## The problem
 
@@ -32,7 +32,7 @@ This is not a bug in these functions. It is a fault in the C standard for design
 
 ## The solution
 
-An alternative way to represent strings is with a pointer and a size. This is done in C++'s `std::string`, `std::string_view` and other languages. This representation does not have C's problem and has other technical benefits unrelated to correctness that this post does not go into (todo: find a reference).
+An alternative way to represent strings is with a pointer and a size. This is done in C++'s `std::string`, `std::string_view` and other languages. This representation does not have C's problem and has other technical benefits unrelated to correctness that this post does not go into.
 
 A historical reason that C chose the null byte representation is that it saves memory. Only one extra byte is needed. This is no longer a good reason and maybe was not one even then. The gain in efficiency is not worth the loss in correctness.
 
@@ -46,4 +46,4 @@ You can store string literals containing null bytes in arrays with `const char t
 
 SQLite [claims](https://www.sqlite.org/datatype3.html) its string type stores UTF-8. This is incorrect because SQLite uses null terminated strings. If you try to store a string containing a null byte, it will **silently** be cut off.
 
-Postgres [claims](https://www.postgresql.org/docs/15/multibyte.html) its string type can store UTF-8. This is incorrect because Postgres uses null terminated strings. This is handled better than in SQLite because Postgres [documents](https://www.postgresql.org/docs/15/datatype-character.html) (search for `NUL`) the restriction and attempts to errors when a string containing a null byte would be used.
+Postgres [claims](https://www.postgresql.org/docs/15/multibyte.html) its string type can store UTF-8. This is incorrect because Postgres uses null terminated strings. This is handled better than in SQLite because Postgres [documents](https://www.postgresql.org/docs/15/datatype-character.html) (search for `NUL`) the restriction and errors when a string containing a null byte would be used.
