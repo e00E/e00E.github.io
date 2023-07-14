@@ -8,7 +8,7 @@ generate_feed = true
 feed_filename = "atom.xml"
 
 [markdown]
-highlight_code = true
+highlight_code = false
 highlight_theme = "solarized-light"
 
 [slugify]
