@@ -24,7 +24,7 @@ jobs:
       - name: Get Zola
         run: |
           mkdir /tmp/zola
-          wget -q -O - "https://github.com/getzola/zola/releases/download/v0.16.1/zola-v0.16.1-x86_64-unknown-linux-gnu.tar.gz" | tar -xzf - --directory /tmp
+          wget -q -O - "https://github.com/getzola/zola/releases/download/v0.19.2/zola-v0.19.2-x86_64-unknown-linux-gnu.tar.gz" | tar -xzf - --directory /tmp
       - name: Build
         run: /tmp/zola build
       - name: Upload artifact
