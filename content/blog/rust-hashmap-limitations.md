@@ -27,7 +27,7 @@ This operation looks up the key twice. First in `get_mut`, then in `insert`.
 Here is the equivalent code with the entry API:
 
 ```rust
-fn insert_or_increment(key: String, hashmap: &mut std::collections::HashMap<String, u32>) {
+fn insert_or_increment(key: String, hashmap: &mut HashMap<String, u32>) {
     hashmap
         .entry(key)
         .and_modify(|value| *value += 1)
@@ -42,7 +42,7 @@ Unfortunately, the entry API has a limitation. It takes the key by value. It doe
 Consider this modification of the previous example. We now take the key as a string reference rather than a string value:
 
 ```rust
-fn insert_or_increment(key: &str, hashmap: &mut std::collections::HashMap<String, u32>) {
+fn insert_or_increment(key: &str, hashmap: &mut HashMap<String, u32>) {
     hashmap
         .entry(key.to_owned())
         .and_modify(|value| *value += 1)
@@ -127,7 +127,7 @@ impl<'a> Borrow<KeyRef<'a>> for Key {
     }
 }
 
-fn contains_key(key_a: &str, key_b: &str, hashmap: &std::collections::HashMap<Key, ()>) -> bool {
+fn contains_key(key_a: &str, key_b: &str, hashmap: &MyHashMap) -> bool {
     let key_ref = KeyRef { a: key_a, b: key_b };
     hashmap.contains_key(&key_ref)
 }
