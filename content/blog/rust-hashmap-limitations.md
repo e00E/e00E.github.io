@@ -4,7 +4,7 @@ date = 2024-12-16
 updated = 2024-12-16
 +++
 
-This post gives examples of API limitations in Rust's hash table type ([`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html)). The limitations make some code slower than necessary. The limitations are on the API level. It is easy to fix them but it requires changing stable standard library APIs.
+This post gives examples of API limitations in the Rust standard library's [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html). The limitations make some code slower than necessary. The limitations are on the API level. You don't need to change much implementation code to fix them but you need to change stable standard library APIs.
 
 ## Entry
 
