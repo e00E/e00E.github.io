@@ -137,6 +137,6 @@ This does not compile. In the borrow function we attempt to return a reference t
 
 This problem could be avoided by changing the borrow trait or introducing a new trait for this purpose.
 
-(In the specific example above, we could workaround this limitation by changing our key type to store `Cow<str>` instead of `String`. This is worse than the `KeyRef` solution because it is slower because now all of our keys are enums.)
+(In the specific example above, we could workaround this limitation by changing our key type to store `Cow<str>` instead of `String`. This is worse than the `KeyRef` solution because it is slower because now all of our keys are enums. A more efficient, more boilerplate workaround is using `&dyn` trait objects as [documented](https://github.com/sunshowers-code/borrow-complex-key-example) by user sunshowers.)
 
 The custom hash table implementation in the hashbrown crate implements this improvement. Hashbrown uses a better designed [custom trait](https://docs.rs/hashbrown/0.15.2/hashbrown/trait.Equivalent.html) instead of the standard borrow trait.
