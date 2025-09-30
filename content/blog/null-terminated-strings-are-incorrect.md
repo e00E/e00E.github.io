@@ -1,5 +1,5 @@
 +++
-title = "Null terminated strings are incorrect"
+title = "null terminated strings are incorrect"
 date = 2022-11-25
 updated = 2022-11-25
 +++

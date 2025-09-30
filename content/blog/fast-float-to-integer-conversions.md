@@ -1,5 +1,5 @@
 +++
-title = "Fast float to integer conversions"
+title = "fast float to integer conversions"
 date = 2024-11-10
 updated = 2024-11-10
 +++

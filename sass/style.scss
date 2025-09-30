@@ -2,6 +2,7 @@ article,
 section {
     margin: 0 auto;
     max-width: 120ch;
+    overflow-wrap: break-word;
 }
 
 #article-dates {
