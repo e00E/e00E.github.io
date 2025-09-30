@@ -4,7 +4,7 @@ date = 2025-09-29
 updated = 2025-09-29
 +++
 
-Some Firefox configuration strings give the incorrect impression that Firefox excludes Google from tracking protection. Ihese strings and their explanation are difficult to find through internet search. This article is that explanation.
+Some Firefox configuration strings give the incorrect impression that Firefox excludes Google from tracking protection. These strings and their explanation are difficult to find through internet search. This article is that explanation.
 
 Firefox has built in tracking protection with configuration in `about:config`. Some of the config keys contain "whitelist":
 
