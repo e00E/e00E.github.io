@@ -7,10 +7,6 @@ minify_html = true
 generate_feeds = true
 feed_filenames = [ "atom.xml" ]
 
-[markdown]
-highlight_code = false
-highlight_theme = "solarized-light"
-
 [slugify]
 # I prefer manually following the slugify guidelines for file names so I know exactly what the pages are called.
 paths = "off"
