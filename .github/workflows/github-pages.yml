@@ -1,3 +1,6 @@
+# https://www.getzola.org/documentation/deployment/github-pages/
+# https://github.com/getzola/github-pages
+
 name: Build and deploy Zola website
 on:
   push:
