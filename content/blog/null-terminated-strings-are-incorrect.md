@@ -1,7 +1,7 @@
 +++
 title = "null terminated strings are incorrect"
 date = 2022-11-25
-updated = 2022-11-25
+updated = 2026-05-10
 +++
 
 ## Introduction
@@ -44,6 +44,146 @@ You can store string literals containing null bytes in arrays with `const char t
 
 ## Examples of problematic software
 
-SQLite [claims](https://www.sqlite.org/datatype3.html) its string type stores UTF-8. This is incorrect because SQLite uses null terminated strings. If you try to store a string containing a null byte, it will **silently** be cut off.
+### SQLite
 
-Postgres [claims](https://www.postgresql.org/docs/15/multibyte.html) its string type can store UTF-8. This is incorrect because Postgres uses null terminated strings. This is handled better than in SQLite because Postgres [documents](https://www.postgresql.org/docs/15/datatype-character.html) (search for `NUL`) the restriction and errors when a string containing a null byte would be used.
+SQLite [states](https://www.sqlite.org/datatype3.html) its string type stores UTF-8. This is incorrect because SQLite uses null terminated strings. See [documentation](https://sqlite.org/c3ref/bind_blob.html) stating strings containing null bytes are undefined behavior. In practice they don't cause errors but are sometimes silently cut off.
+
+<details>
+<summary>documentation quote</summary>
+
+> In those routines that have a fourth argument, its value is the number of bytes in the parameter. To be clear: the value is the number of bytes in the value, not the number of characters. If the fourth parameter to sqlite3_bind_text() or sqlite3_bind_text16() is negative, then the length of the string is the number of bytes up to the first zero terminator. If the fourth parameter to sqlite3_bind_blob() is negative, then the behavior is undefined. If a non-negative fourth parameter is provided to sqlite3_bind_text() or sqlite3_bind_text16() or sqlite3_bind_text64() then that parameter must be the byte offset where the NUL terminator would occur assuming the string were NUL terminated. If any NUL characters occur at byte offsets less than the value of the fourth parameter then the resulting string value will contain embedded NULs. The result of expressions involving strings with embedded NULs is undefined.
+
+</details>
+
+<details>
+<summary>program demonstrating null byte behavior</summary>
+
+```c
+// Compile with `-std=C23`.
+
+#include <assert.h>
+#include <stdio.h>
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything"
+#include "sqlite3.h"
+#pragma clang diagnostic pop
+
+int main() {
+    sqlite3* db = nullptr;
+    int result = 0;
+    sqlite3_stmt* statement;
+
+    const char* data = "first\0second";
+    const int data_len = 13;
+
+    result = sqlite3_open_v2(
+        "a",
+        &db,
+        SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_MEMORY,
+        nullptr
+    );
+    assert(result == SQLITE_OK);
+
+    result = sqlite3_exec(
+        db,
+        "CREATE TABLE table_(text TEXT, blob BLOB);",
+        nullptr,
+        nullptr,
+        nullptr
+    );
+    assert(result == SQLITE_OK);
+
+    result = sqlite3_prepare_v3(
+        db,
+        "INSERT INTO table_(text, blob) VALUES (?1, ?2);",
+        -1,
+        0,
+        &statement,
+        nullptr
+    );
+    assert(result == SQLITE_OK);
+    result = sqlite3_bind_text(statement, 1, data, data_len, SQLITE_STATIC);
+    assert(result == SQLITE_OK);
+    result = sqlite3_bind_blob(statement, 2, data, data_len, SQLITE_STATIC);
+    assert(result == SQLITE_OK);
+    result = sqlite3_step(statement);
+    assert(result == SQLITE_DONE);
+    result = sqlite3_finalize(statement);
+    assert(result == SQLITE_OK);
+
+    result = sqlite3_prepare_v3(
+        db,
+        "SELECT text, blob FROM table_;",
+        -1,
+        0,
+        &statement,
+        nullptr
+    );
+    assert(result == SQLITE_OK);
+    result = sqlite3_step(statement);
+    assert(result == SQLITE_ROW);
+    const int text_size = sqlite3_column_bytes(statement, 0);
+    const int blob_size = sqlite3_column_bytes(statement, 1);
+    result = sqlite3_finalize(statement);
+    assert(result == SQLITE_OK);
+
+    result = sqlite3_prepare_v3(
+        db,
+        "SELECT CAST(text as BLOB), CAST(blob as TEXT) FROM table_;",
+        -1,
+        0,
+        &statement,
+        nullptr
+    );
+    assert(result == SQLITE_OK);
+    result = sqlite3_step(statement);
+    assert(result == SQLITE_ROW);
+    const int text_as_blob_size = sqlite3_column_bytes(statement, 0);
+    const int blob_as_text_size = sqlite3_column_bytes(statement, 1);
+    result = sqlite3_finalize(statement);
+    assert(result == SQLITE_OK);
+
+    result = sqlite3_prepare_v3(
+        db,
+        "SELECT text FROM table_ WHERE text LIKE '%second%';",
+        -1,
+        0,
+        &statement,
+        nullptr
+    );
+    assert(result == SQLITE_OK);
+    result = sqlite3_step(statement);
+    assert(result == SQLITE_ROW | result == SQLITE_DONE);
+    const bool found_string = result == SQLITE_ROW;
+    result = sqlite3_finalize(statement);
+    assert(result == SQLITE_OK);
+
+    result = sqlite3_close_v2(db);
+    assert(result == SQLITE_OK);
+
+    printf("text size: %i\n", text_size);
+    printf("blob size: %i\n", blob_size);
+    printf("text as blob size: %i\n", text_as_blob_size);
+    printf("blob as text size: %i\n", blob_as_text_size);
+    printf("found string: %i\n", found_string);
+}
+
+/*
+possible output:
+
+text size: 13
+blob size: 13
+text as blob size: 13
+blob as text size: 13
+found string: 0
+*/
+
+
+```
+
+</details>
+
+### Postgres
+
+PostgreSQL [states](https://www.postgresql.org/docs/15/multibyte.html) its string type can store UTF-8. This is incorrect because Postgres uses null terminated strings. This is handled better than in SQLite because Postgres [documents](https://www.postgresql.org/docs/15/datatype-character.html) (search for `NUL`) the restriction and errors when a string containing a null byte would be used.
