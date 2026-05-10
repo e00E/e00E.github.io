@@ -64,10 +64,7 @@ SQLite [states](https://www.sqlite.org/datatype3.html) its string type stores UT
 #include <assert.h>
 #include <stdio.h>
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Weverything"
 #include "sqlite3.h"
-#pragma clang diagnostic pop
 
 int main() {
     sqlite3* db = nullptr;
