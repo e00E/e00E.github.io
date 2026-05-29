@@ -9,25 +9,19 @@ section {
     font-size: small;
 }
 
-code {
-    background-color: #eee;
-}
-
 pre {
-    /* Remove syntax highlighting background color. */
-    background-color: #fff !important;
-    border: 1px solid #999;
+    border: 1px solid;
     max-width: 100%;
     overflow-x: auto;
     padding: 1ch;
 }
 
-pre > code {
-    background-color: #fff;
+pre>code {
+    background-color: transparent;
 }
 
 blockquote {
-    border-left: 0.5ch solid #999;
+    border-left: 0.5ch solid;
     margin-left: 0ch;
     margin-right: 0ch;
     padding-left: 1ch;
@@ -39,6 +33,6 @@ table {
 
 th,
 td {
-    border: 1px solid #999;
+    border: 1px solid;
     padding: 0.5ch;
 }
